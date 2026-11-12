@@ -107,18 +107,12 @@
                             <i class="fa-solid fa-circle-info text-primary me-1"></i>
                             The ₹200 advance confirms your itinerary, hotel reservation locks, and travel slots.
                         </div>
-
-                        <!-- Direct Trip Plan Download Button on Summary Card -->
-                        <button type="button" class="btn btn-danger w-100 fw-bold rounded-pill py-3 mt-3 shadow-sm" 
-                                th:onclick="'downloadItineraryPdf(\'' + ${trip.destination.id} + '\')'">
-                            <i class="fa-solid fa-file-pdf me-2"></i> Download Trip Plan (PDF)
-                        </button>
                     </div>
                 </div>
 
-                <!-- Right: Demo QR Code & Payment Verification Form -->
+                <!-- Right: Scanner & Download Option -->
                 <div class="col-lg-7">
-                    <div class="card border rounded-4 shadow-sm p-3 p-md-4 bg-white">
+                    <div class="card border rounded-4 shadow-sm p-4 bg-white">
                         <div class="text-center mb-3">
                             <span class="badge bg-primary text-white mb-1">Scan &amp; Pay UPI</span>
                             <h5 class="fw-bold mb-0">TripMate UPI Advance Payment</h5>
@@ -141,9 +135,9 @@
                             </div>
                         </div>
 
-                        <!-- Direct Download Option Placed Under Scanner: Downloads Actual Trip Plan (Picture 1) -->
+                        <!-- Direct Download Option Placed Under Scanner -->
                         <div class="mb-3 text-center">
-                            <button type="button" class="btn btn-outline-danger rounded-pill px-4 py-2 fw-bold w-100 shadow-sm" 
+                            <button type="button" class="btn btn-danger btn-lg rounded-pill px-4 py-3 fw-bold w-100 shadow" 
                                     th:onclick="'downloadItineraryPdf(\'' + ${trip.destination.id} + '\')'">
                                 <i class="fa-solid fa-file-pdf me-2"></i> Download Trip Plan (PDF)
                             </button>
@@ -155,7 +149,7 @@
                                     th:onclick="simulateDemoPayment([[${sampleDemoTxId}]])">
                                 <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Quick Fill Demo Transaction ID
                             </button>
-                            <div class="text-muted small" style="font-size: 0.75rem;">Click to simulate UTR for evaluation</div>
+                            <div class="text-muted small" style="font-size: 0.75rem;">Simulate UTR to lock Booking Reference ID</div>
                         </div>
 
                         <!-- Form to submit transaction ID -->
@@ -172,7 +166,7 @@
                             </div>
 
                             <button type="submit" class="btn btn-dark rounded-pill py-2 fw-bold w-100 shadow-sm">
-                                <i class="fa-solid fa-lock me-2"></i> Verify &amp; Get Payment Receipt Voucher
+                                <i class="fa-solid fa-lock me-2"></i> Verify &amp; Get Official Booking Reference ID
                             </button>
                         </form>
                     </div>
