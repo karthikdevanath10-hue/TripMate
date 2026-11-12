@@ -107,23 +107,28 @@
                             <i class="fa-solid fa-circle-info text-primary me-1"></i>
                             The ₹200 advance confirms your itinerary, hotel reservation locks, and travel slots.
                         </div>
+
+                        <!-- Direct Trip Plan Download Button on Summary Card -->
+                        <button type="button" class="btn btn-danger w-100 fw-bold rounded-pill py-3 mt-3 shadow-sm" 
+                                th:onclick="'downloadItineraryPdf(\'' + ${trip.destination.id} + '\')'">
+                            <i class="fa-solid fa-file-pdf me-2"></i> Download Trip Plan (PDF)
+                        </button>
                     </div>
                 </div>
 
                 <!-- Right: Demo QR Code & Payment Verification Form -->
                 <div class="col-lg-7">
-                    <div class="card border rounded-4 shadow-sm p-4 p-md-5 bg-white">
-                        <div class="text-center mb-4">
-                            <span class="badge bg-primary text-white mb-2">Scan &amp; Pay Demo UPI</span>
-                            <h4 class="fw-bold mb-1">TripMate UPI Payment</h4>
-                            <p class="text-muted small">Scan the demo QR code using any UPI app or simulate instantly below.</p>
+                    <div class="card border rounded-4 shadow-sm p-3 p-md-4 bg-white">
+                        <div class="text-center mb-3">
+                            <span class="badge bg-primary text-white mb-1">Scan &amp; Pay UPI</span>
+                            <h5 class="fw-bold mb-0">TripMate UPI Advance Payment</h5>
                         </div>
 
                         <!-- PhonePe UPI QR Scanner Card -->
-                        <div class="qr-container mb-4 text-center">
-                            <div class="d-inline-block p-2 bg-black rounded-4 shadow mb-2" style="max-width: 260px;">
+                        <div class="qr-container mb-3 p-3 text-center">
+                            <div class="d-inline-block p-2 bg-black rounded-3 shadow mb-2" style="max-width: 200px;">
                                 <img th:src="@{/images/upi-scanner.jpg}" alt="PhonePe UPI QR Scanner" 
-                                     class="img-fluid rounded-3" style="max-height: 290px; width: auto; display: block; margin: 0 auto;">
+                                     class="img-fluid rounded-2" style="max-height: 190px; width: auto; display: block; margin: 0 auto;">
                             </div>
                             <div class="fw-bold text-dark fs-6 mt-1">
                                 <i class="fa-solid fa-circle-check text-success me-1"></i> Payee: <span class="text-primary">KARTHIK D</span>
@@ -131,50 +136,43 @@
                             <div class="text-secondary small fw-medium mt-1">
                                 <i class="fa-solid fa-id-card me-1 text-info"></i> UPI ID: <span class="font-monospace fw-bold text-dark">8660954976@axl</span>
                             </div>
-                            <div class="small text-muted mt-1">Scan &amp; Pay using PhonePe, Google Pay, Paytm, or any UPI App</div>
-                            <div class="badge bg-primary text-white fs-6 px-3 py-2 mt-2 rounded-pill shadow-sm">
+                            <div class="badge bg-primary text-white fs-6 px-3 py-1 mt-1 rounded-pill shadow-sm">
                                 Advance Amount: ₹200.00
                             </div>
                         </div>
 
                         <!-- Direct Download Option Placed Under Scanner: Downloads Actual Trip Plan (Picture 1) -->
-                        <div class="mb-4 text-center">
-                            <button type="button" class="btn btn-danger btn-lg rounded-pill px-4 py-3 fw-bold w-100 shadow" 
+                        <div class="mb-3 text-center">
+                            <button type="button" class="btn btn-outline-danger rounded-pill px-4 py-2 fw-bold w-100 shadow-sm" 
                                     th:onclick="'downloadItineraryPdf(\'' + ${trip.destination.id} + '\')'">
                                 <i class="fa-solid fa-file-pdf me-2"></i> Download Trip Plan (PDF)
                             </button>
-                            <div class="text-muted small mt-2">
-                                <i class="fa-solid fa-circle-check text-success me-1"></i> Opens and saves your selected destination plan &amp; day-wise itinerary as PDF.
-                            </div>
                         </div>
 
                         <!-- One-Click Demo Autofill for Evaluator -->
-                        <div class="mb-3 text-center no-print border-top pt-3">
-                            <button type="button" class="btn btn-outline-success btn-sm rounded-pill px-3 py-2 fw-semibold" 
+                        <div class="mb-2 text-center no-print border-top pt-2">
+                            <button type="button" class="btn btn-outline-success btn-sm rounded-pill px-3 py-1 fw-semibold" 
                                     th:onclick="simulateDemoPayment([[${sampleDemoTxId}]])">
                                 <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Quick Fill Demo Transaction ID
                             </button>
-                            <div class="text-muted small mt-1">Simulate PhonePe reference for evaluation.</div>
+                            <div class="text-muted small" style="font-size: 0.75rem;">Click to simulate UTR for evaluation</div>
                         </div>
 
                         <!-- Form to submit transaction ID -->
                         <form th:action="@{/payment/process}" method="post" class="no-print">
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold small mb-1">
                                     PhonePe Transaction Reference / UPI UTR <span class="text-danger">*</span>
                                 </label>
-                                <div class="input-group">
+                                <div class="input-group input-group-sm">
                                     <span class="input-group-text bg-white"><i class="fa-solid fa-hashtag text-muted"></i></span>
                                     <input type="text" name="transactionId" id="transactionIdInput" class="form-control" 
                                            placeholder="e.g. UPI/DEMO/2026889921" required minlength="6">
                                 </div>
-                                <div class="form-text small">
-                                    Enter PhonePe UTR to verify payment and lock your Booking Reference ID.
-                                </div>
                             </div>
 
-                            <button type="submit" class="btn btn-dark rounded-pill py-3 fw-bold w-100 shadow-sm">
-                                <i class="fa-solid fa-lock me-2"></i> Verify &amp; Get Booking Reference ID (₹200)
+                            <button type="submit" class="btn btn-dark rounded-pill py-2 fw-bold w-100 shadow-sm">
+                                <i class="fa-solid fa-lock me-2"></i> Verify &amp; Get Payment Receipt Voucher
                             </button>
                         </form>
                     </div>
