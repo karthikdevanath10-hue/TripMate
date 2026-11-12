@@ -105,16 +105,41 @@ function simulateDemoPayment(sampleId) {
 }
 
 /**
- * Print booking voucher / download PDF
+ * Print booking voucher / download payment receipt
  */
 function printVoucher() {
     window.print();
 }
 
 /**
- * Download Trip Plan PDF directly
+ * Download Trip Plan PDF directly on the itinerary page
  */
 function downloadTripPlanPdf() {
     window.print();
 }
+
+/**
+ * Open and download the actual trip plan / itinerary as PDF from the payment page
+ */
+function downloadItineraryPdf(destId) {
+    if (!destId) {
+        window.print();
+        return;
+    }
+    const printUrl = '/itinerary/' + destId + '?print=true';
+    const win = window.open(printUrl, '_blank');
+    if (win) {
+        win.focus();
+    }
+}
+
+// Auto-trigger print dialog if page was opened with ?print=true (for itinerary PDF generation)
+if (typeof window !== 'undefined' && window.location && window.location.search && window.location.search.includes('print=true')) {
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            window.print();
+        }, 500);
+    });
+}
+
 

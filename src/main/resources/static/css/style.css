@@ -429,12 +429,23 @@ main {
         display: none !important;
     }
     body {
-        background: #ffffff;
-        color: #000000;
+        background: #ffffff !important;
+        color: #000000 !important;
     }
     .voucher-container {
-        box-shadow: none;
-        border: 1px solid #000000;
+        box-shadow: none !important;
+        border: 1px solid #000000 !important;
+    }
+    .card, .itinerary-day-card {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+        page-break-inside: avoid;
+    }
+    .sticky-top {
+        position: static !important;
+    }
+    a[href]:after {
+        content: none !important;
     }
 }
 

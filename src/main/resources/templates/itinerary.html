@@ -10,13 +10,19 @@
         <div class="container">
 
             <!-- Breadcrumb Navigation -->
-            <nav aria-label="breadcrumb" class="mb-4">
+            <nav aria-label="breadcrumb" class="mb-4 no-print">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
                     <li class="breadcrumb-item"><a th:href="@{/destinations}">Destinations</a></li>
                     <li class="breadcrumb-item active" aria-current="page" th:text="${destination.name}">Mysore</li>
                 </ol>
             </nav>
+
+            <!-- Printable Header for PDF -->
+            <div class="d-none d-print-block text-center border-bottom pb-3 mb-4">
+                <h2 class="fw-bold text-primary mb-1">TripMate &mdash; Personalized Trip Plan</h2>
+                <div class="text-secondary small">Tagline: Plan Your Trip, Set Your Budget, Explore Your World.</div>
+            </div>
 
             <!-- Destination Hero Card -->
             <div class="card border rounded-4 shadow-sm overflow-hidden mb-5 bg-white">
@@ -167,12 +173,20 @@
                             <p class="small text-muted mb-0">Demo advance required to confirm booking.</p>
                         </div>
 
-                        <!-- CTA Button: Pay and Download -->
-                        <a th:href="@{/payment}" class="btn btn-primary rounded-pill py-3 fw-bold w-100 shadow">
-                            <i class="fa-solid fa-file-invoice-dollar me-2"></i> Pay and Download
-                        </a>
+                        <!-- Action Buttons -->
+                        <div class="d-flex flex-column gap-2 mb-3 no-print">
+                            <!-- Download Trip Plan PDF Button -->
+                            <button type="button" class="btn btn-danger btn-lg rounded-pill fw-bold w-100 shadow-sm" onclick="downloadTripPlanPdf()">
+                                <i class="fa-solid fa-file-pdf me-2"></i> Download Trip Plan (PDF)
+                            </button>
 
-                        <a th:href="@{/destinations}" class="btn btn-outline-secondary rounded-pill py-2 w-100 mt-2 text-decoration-none">
+                            <!-- Pay & Confirm Button -->
+                            <a th:href="@{/payment}" class="btn btn-primary btn-lg rounded-pill fw-bold w-100 shadow">
+                                <i class="fa-solid fa-credit-card me-2"></i> Pay ₹200 Advance
+                            </a>
+                        </div>
+
+                        <a th:href="@{/destinations}" class="btn btn-outline-secondary rounded-pill py-2 w-100 no-print text-decoration-none">
                             <i class="fa-solid fa-arrow-left me-1"></i> Back to Destinations
                         </a>
                     </div>
@@ -180,7 +194,7 @@
             </div>
 
             <!-- College OOP Box -->
-            <div class="oop-box mt-5">
+            <div class="oop-box mt-5 no-print">
                 <span class="oop-badge"><i class="fa-solid fa-diagram-project me-1"></i> OOP Concept: Polymorphism in Action</span>
                 <h6 class="fw-bold text-primary mb-1">Polymorphic Total Cost Computation:</h6>
                 <p class="small text-muted mb-0">
