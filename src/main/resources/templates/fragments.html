@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="html_head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' | TripMate - Smart Trip Planner'">TripMate - Smart Trip Planner</title>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom TripMate CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <!-- Header & Navigation Bar -->
+    <header th:fragment="navbar(activeTab)">
+        <nav class="navbar navbar-expand-lg navbar-tripmate sticky-top">
+            <div class="container">
+                <a class="navbar-brand" th:href="@{/}">
+                    <i class="fa-solid fa-compass text-primary"></i>
+                    <span>Trip</span>Mate
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#tripmateNavbar" aria-controls="tripmateNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="tripmateNavbar">
+                    <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${activeTab == 'home'} ? 'active' : ''" th:href="@{/}">
+                                <i class="fa-solid fa-house me-1"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${activeTab == 'destinations'} ? 'active' : ''" th:href="@{/destinations}">
+                                <i class="fa-solid fa-map-location-dot me-1"></i> Destinations
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${activeTab == 'bookings'} ? 'active' : ''" th:href="@{/my-booking}">
+                                <i class="fa-solid fa-ticket me-1"></i> My Booking
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${activeTab == 'about'} ? 'active' : ''" th:href="@{/about}">
+                                <i class="fa-solid fa-graduation-cap me-1"></i> About &amp; OOP
+                            </a>
+                        </li>
+                        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                            <a class="btn btn-nav-plan" th:href="@{/plan}">
+                                <i class="fa-solid fa-paper-plane me-1"></i> Plan a Trip
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Global Footer -->
+    <footer th:fragment="footer" class="footer-tripmate">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="navbar-brand text-white mb-2">
+                        <i class="fa-solid fa-compass text-info"></i>
+                        <span class="text-white">Trip</span><span class="text-info">Mate</span>
+                    </div>
+                    <p class="small text-secondary">
+                        Plan Your Trip, Set Your Budget, Explore Your World. An intelligent, budget-first travel planner built with Java Spring Boot and Object-Oriented Principles.
+                    </p>
+                    <div class="d-flex gap-2 mt-3">
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Java 21+</span>
+                        <span class="badge bg-info-subtle text-info border border-info-subtle">Spring Boot 3</span>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle">Thymeleaf</span>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled small d-flex flex-column gap-2">
+                        <li><a th:href="@{/}"><i class="fa-solid fa-angle-right me-1 text-primary"></i> Home</a></li>
+                        <li><a th:href="@{/plan}"><i class="fa-solid fa-angle-right me-1 text-primary"></i> Plan a Trip</a></li>
+                        <li><a th:href="@{/destinations}"><i class="fa-solid fa-angle-right me-1 text-primary"></i> Destinations</a></li>
+                        <li><a th:href="@{/my-booking}"><i class="fa-solid fa-angle-right me-1 text-primary"></i> My Booking</a></li>
+                        <li><a th:href="@{/about}"><i class="fa-solid fa-angle-right me-1 text-primary"></i> OOP Concepts Guide</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5>OOP Concepts</h5>
+                    <ul class="list-unstyled small d-flex flex-column gap-2 text-secondary">
+                        <li><i class="fa-solid fa-shield-halved text-warning me-1"></i> <strong>Data Encapsulation:</strong> Payment &amp; Models</li>
+                        <li><i class="fa-solid fa-sitemap text-info me-1"></i> <strong>Inheritance:</strong> Trip &rarr; SoloTrip, GroupTrip</li>
+                        <li><i class="fa-solid fa-shapes text-success me-1"></i> <strong>Polymorphism:</strong> Dynamic Trip Cost Calculation</li>
+                        <li><i class="fa-solid fa-layer-group text-primary me-1"></i> <strong>Abstraction:</strong> PaymentService &amp; Abstract Trip</li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5>College Mini-Project</h5>
+                    <p class="small text-secondary mb-2">
+                        Developed as a Java Object-Oriented Programming (OOP) mini-project showcasing safe data encapsulation and Spring Boot MVC architecture.
+                    </p>
+                    <p class="small text-secondary mb-0">
+                        <i class="fa-solid fa-envelope me-1 text-info"></i> contact@tripmate.local
+                    </p>
+                </div>
+            </div>
+
+            <div class="footer-bottom text-center text-secondary">
+                <p class="mb-0">
+                    &copy; 2026 TripMate &mdash; Plan Your Trip, Set Your Budget, Explore Your World. All Rights Reserved.
+                </p>
+            </div>
+        </div>
+
+        <!-- Bootstrap 5 JS Bundle -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Custom Script -->
+        <script th:src="@{/js/script.js}"></script>
+    </footer>
+
+</body>
+</html>
+

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: html_head('Select Trip Type')}"></head>
+<body>
+
+    <!-- Header -->
+    <header th:replace="~{fragments :: navbar('plan')}"></header>
+
+    <main class="py-5">
+        <div class="container">
+            <!-- Progress indicator -->
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="d-flex justify-content-between align-items-center position-relative">
+                        <div class="text-center" style="z-index: 2;">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-1 fw-bold shadow" style="width: 38px; height: 38px;">1</div>
+                            <span class="small fw-bold text-primary">Trip Type</span>
+                        </div>
+                        <div class="text-center" style="z-index: 2;">
+                            <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center mx-auto mb-1 fw-bold" style="width: 38px; height: 38px;">2</div>
+                            <span class="small text-muted">Details &amp; Budget</span>
+                        </div>
+                        <div class="text-center" style="z-index: 2;">
+                            <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center mx-auto mb-1 fw-bold" style="width: 38px; height: 38px;">3</div>
+                            <span class="small text-muted">Destinations</span>
+                        </div>
+                        <div class="text-center" style="z-index: 2;">
+                            <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center mx-auto mb-1 fw-bold" style="width: 38px; height: 38px;">4</div>
+                            <span class="small text-muted">Advance Payment</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Title -->
+            <div class="text-center max-w-700 mx-auto mb-5">
+                <span class="badge bg-primary-subtle text-primary fw-bold text-uppercase px-3 py-2 rounded-pill">Step 1 of 4</span>
+                <h2 class="fw-bold mt-2">How are you travelling?</h2>
+                <p class="text-muted">Choose your travel mode to customize your itinerary and budget calculations.</p>
+            </div>
+
+            <!-- Trip Type Cards -->
+            <div class="row g-4 justify-content-center max-w-900 mx-auto">
+                <!-- Solo Trip -->
+                <div class="col-md-6">
+                    <a th:href="@{/user-details(tripType='solo')}" class="text-decoration-none">
+                        <div class="option-card h-100">
+                            <div class="option-icon-circle">
+                                <i class="fa-solid fa-person-walking-luggage"></i>
+                            </div>
+                            <h3 class="fw-bold text-dark mb-2">Solo Trip</h3>
+                            <span class="badge bg-primary text-white rounded-pill px-3 py-1 mb-3">1 Traveller</span>
+                            <p class="text-muted mb-4">
+                                Embark on an independent journey at your own pace. Perfect for self-discovery, weekend backpackers, and solo photography trips.
+                            </p>
+                            <ul class="list-unstyled text-start text-secondary small mb-4 d-flex flex-column gap-2">
+                                <li><i class="fa-solid fa-check text-success me-2"></i> Individual budget matching</li>
+                                <li><i class="fa-solid fa-check text-success me-2"></i> Private accommodation &amp; solo transit</li>
+                                <li><i class="fa-solid fa-check text-success me-2"></i> Flexible daily itineraries</li>
+                            </ul>
+                            <div class="btn btn-outline-primary rounded-pill w-100 fw-semibold py-2">
+                                Choose Solo Trip <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Group Trip -->
+                <div class="col-md-6">
+                    <a th:href="@{/user-details(tripType='group')}" class="text-decoration-none">
+                        <div class="option-card h-100">
+                            <div class="option-icon-circle" style="background: linear-gradient(135deg, #e0e7ff, #c7d2fe); color: #4338ca;">
+                                <i class="fa-solid fa-people-group"></i>
+                            </div>
+                            <h3 class="fw-bold text-dark mb-2">Group Trip</h3>
+                            <span class="badge bg-indigo text-white rounded-pill px-3 py-1 mb-3" style="background:#4338ca;">2+ Travellers</span>
+                            <p class="text-muted mb-4">
+                                Planning a vacation with friends, classmates, or family. Share expenses for hotel rooms and vehicle rentals to save more per person.
+                            </p>
+                            <ul class="list-unstyled text-start text-secondary small mb-4 d-flex flex-column gap-2">
+                                <li><i class="fa-solid fa-check text-success me-2"></i> Smart room-sharing cost optimization</li>
+                                <li><i class="fa-solid fa-check text-success me-2"></i> Pooled local transport estimation</li>
+                                <li><i class="fa-solid fa-check text-success me-2"></i> Enter group member names &amp; ages</li>
+                            </ul>
+                            <div class="btn btn-outline-primary rounded-pill w-100 fw-semibold py-2">
+                                Choose Group Trip <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- College OOP Note -->
+            <div class="max-w-900 mx-auto mt-5">
+                <div class="oop-box">
+                    <span class="oop-badge"><i class="fa-solid fa-code me-1"></i> OOP Concept: Inheritance &amp; Polymorphism</span>
+                    <h6 class="fw-bold text-primary mb-1">How Java Models This Choice:</h6>
+                    <p class="small text-muted mb-0">
+                        Choosing <strong>Solo</strong> creates an instance of <code>SoloTrip</code>, while choosing <strong>Group</strong> creates <code>GroupTrip</code>. Both inherit from the abstract class <code>Trip</code> and override <code>calculateTotalCost()</code> with custom logic!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments :: footer}"></footer>
+
+</body>
+</html>
+

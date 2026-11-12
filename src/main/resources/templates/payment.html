@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: html_head('Advance Payment &bull; Data Encapsulation')}"></head>
+<body>
+
+    <!-- Header -->
+    <header th:replace="~{fragments :: navbar('plan')}"></header>
+
+    <main class="py-5">
+        <div class="container">
+
+            <!-- Progress indicator -->
+            <div class="row mb-5 no-print">
+                <div class="col-lg-8 mx-auto">
+                    <div class="d-flex justify-content-between align-items-center position-relative">
+                        <div class="text-center" style="z-index: 2;">
+                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto mb-1 fw-bold" style="width: 38px; height: 38px;">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <span class="small text-success">Trip Type</span>
+                        </div>
+                        <div class="text-center" style="z-index: 2;">
+                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto mb-1 fw-bold" style="width: 38px; height: 38px;">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <span class="small text-success">Details &amp; Budget</span>
+                        </div>
+                        <div class="text-center" style="z-index: 2;">
+                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto mb-1 fw-bold" style="width: 38px; height: 38px;">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <span class="small text-success">Destinations</span>
+                        </div>
+                        <div class="text-center" style="z-index: 2;">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-1 fw-bold shadow" style="width: 38px; height: 38px;">4</div>
+                            <span class="small fw-bold text-primary">Advance Payment</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Title -->
+            <div class="text-center max-w-700 mx-auto mb-5">
+                <span class="badge bg-warning-subtle text-dark border border-warning-subtle fw-bold px-3 py-2 rounded-pill mb-2">
+                    <i class="fa-solid fa-flask-vial me-1"></i> College Demo Payment Gateway
+                </span>
+                <h2 class="fw-bold mt-1">Confirm Booking with ₹200 Advance</h2>
+                <p class="text-muted">
+                    This module showcases <strong>Java Data Encapsulation</strong>. Financial state is safeguarded by private fields in the <code>Payment</code> class.
+                </p>
+            </div>
+
+            <!-- Error Banner -->
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show max-w-900 mx-auto" role="alert">
+                <i class="fa-solid fa-circle-exclamation me-2"></i>
+                <span th:text="${errorMessage}">Error</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div class="row g-4 max-w-900 mx-auto">
+                <!-- Left: Booking Summary -->
+                <div class="col-lg-5">
+                    <div class="card border rounded-4 shadow-sm p-4 h-100 bg-white">
+                        <h5 class="fw-bold mb-3 border-bottom pb-2">
+                            <i class="fa-solid fa-clipboard-list text-primary me-2"></i> Booking Summary
+                        </h5>
+
+                        <ul class="list-unstyled d-flex flex-column gap-3 mb-4">
+                            <li>
+                                <div class="text-muted small">Destination</div>
+                                <div class="fw-bold text-dark fs-5" th:text="${trip.destination.name}">Mysore</div>
+                                <div class="text-secondary small" th:text="${trip.destination.state}">Karnataka</div>
+                            </li>
+                            <li class="border-top pt-2">
+                                <div class="text-muted small">Lead Traveler</div>
+                                <div class="fw-bold text-dark" th:text="${trip.user.fullName}">Rahul Sharma</div>
+                            </li>
+                            <li class="border-top pt-2">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="text-muted small">Trip Type</div>
+                                        <div class="fw-bold text-primary" th:text="${trip.tripType}">Solo Trip</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="text-muted small">Travellers</div>
+                                        <div class="fw-bold text-dark" th:text="${trip.user.numberOfTravellers}">1</div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="border-top pt-2">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted small">Total Estimated Cost:</span>
+                                    <span class="fw-bold text-dark">₹<span th:text="${#numbers.formatDecimal(totalCost, 0, 'COMMA', 0, 'POINT')}">4,500</span></span>
+                                </div>
+                            </li>
+                            <li class="d-flex justify-content-between text-primary">
+                                <span class="fw-bold">Advance Payable Now:</span>
+                                <span class="fw-bold fs-5">₹<span th:text="${#numbers.formatDecimal(advanceAmount, 0, 'COMMA', 0, 'POINT')}">2,000</span></span>
+                            </li>
+                            <li class="d-flex justify-content-between border-top pt-2 text-muted small">
+                                <span>Remaining Balance at Destination:</span>
+                                <span class="fw-bold text-dark">₹<span th:text="${#numbers.formatDecimal(remainingBalance, 0, 'COMMA', 0, 'POINT')}">2,500</span></span>
+                            </li>
+                        </ul>
+
+                        <div class="mt-auto p-3 bg-light rounded-3 border small text-secondary">
+                            <i class="fa-solid fa-circle-info text-primary me-1"></i>
+                            The ₹200 advance confirms your itinerary, hotel reservation locks, and travel slots.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Demo QR Code & Payment Verification Form -->
+                <div class="col-lg-7">
+                    <div class="card border rounded-4 shadow-sm p-4 p-md-5 bg-white">
+                        <div class="text-center mb-4">
+                            <span class="badge bg-primary text-white mb-2">Scan &amp; Pay Demo UPI</span>
+                            <h4 class="fw-bold mb-1">TripMate UPI Payment</h4>
+                            <p class="text-muted small">Scan the demo QR code using any UPI app or simulate instantly below.</p>
+                        </div>
+
+                        <!-- PhonePe UPI QR Scanner Card -->
+                        <div class="qr-container mb-4 text-center">
+                            <div class="d-inline-block p-2 bg-black rounded-4 shadow mb-2" style="max-width: 260px;">
+                                <img th:src="@{/images/upi-scanner.jpg}" alt="PhonePe UPI QR Scanner" 
+                                     class="img-fluid rounded-3" style="max-height: 290px; width: auto; display: block; margin: 0 auto;">
+                            </div>
+                            <div class="fw-bold text-dark fs-6 mt-1">
+                                <i class="fa-solid fa-circle-check text-success me-1"></i> Payee: <span class="text-primary">KARTHIK D</span>
+                            </div>
+                            <div class="text-secondary small fw-medium mt-1">
+                                <i class="fa-solid fa-id-card me-1 text-info"></i> UPI ID: <span class="font-monospace fw-bold text-dark">8660954976@axl</span>
+                            </div>
+                            <div class="small text-muted mt-1">Scan &amp; Pay using PhonePe, Google Pay, Paytm, or any UPI App</div>
+                            <div class="badge bg-primary text-white fs-6 px-3 py-2 mt-2 rounded-pill shadow-sm">
+                                Advance Amount: ₹200.00
+                            </div>
+                        </div>
+
+                        <!-- Direct Download Option Placed Under Scanner -->
+                        <div class="mb-4 text-center">
+                            <button type="button" class="btn btn-primary btn-lg rounded-pill px-4 py-3 fw-bold w-100 shadow" onclick="downloadTripPlanPdf()">
+                                <i class="fa-solid fa-file-arrow-down me-2"></i> Download Trip Plan (PDF)
+                            </button>
+                            <div class="text-muted small mt-2">
+                                <i class="fa-solid fa-circle-check text-success me-1"></i> Click to instantly download and save your complete trip itinerary &amp; budget PDF.
+                            </div>
+                        </div>
+
+                        <!-- One-Click Demo Autofill for Evaluator -->
+                        <div class="mb-3 text-center no-print border-top pt-3">
+                            <button type="button" class="btn btn-outline-success btn-sm rounded-pill px-3 py-2 fw-semibold" 
+                                    th:onclick="simulateDemoPayment([[${sampleDemoTxId}]])">
+                                <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Quick Fill Demo Transaction ID
+                            </button>
+                            <div class="text-muted small mt-1">Simulate PhonePe reference for evaluation.</div>
+                        </div>
+
+                        <!-- Form to submit transaction ID -->
+                        <form th:action="@{/payment/process}" method="post" class="no-print">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">
+                                    PhonePe Transaction Reference / UPI UTR <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="fa-solid fa-hashtag text-muted"></i></span>
+                                    <input type="text" name="transactionId" id="transactionIdInput" class="form-control" 
+                                           placeholder="e.g. UPI/DEMO/2026889921" required minlength="6">
+                                </div>
+                                <div class="form-text small">
+                                    Enter PhonePe UTR to verify payment and lock your Booking Reference ID.
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-dark rounded-pill py-3 fw-bold w-100 shadow-sm">
+                                <i class="fa-solid fa-lock me-2"></i> Verify &amp; Get Booking Reference ID (₹200)
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- College OOP Encapsulation Detailed Explanation Box -->
+            <div class="max-w-900 mx-auto mt-5 no-print">
+                <div class="oop-box">
+                    <span class="oop-badge"><i class="fa-solid fa-shield-halved me-1"></i> Highlighted For College Evaluation</span>
+                    <h5 class="fw-bold text-primary mb-2">How Data Encapsulation Works in the <code>Payment</code> Class</h5>
+                    <p class="small text-muted mb-3">
+                        During your project viva, your evaluator can inspect the <code>com.tripmate.model.Payment</code> class:
+                    </p>
+                    <div class="bg-dark text-light p-3 rounded-3 small font-monospace overflow-x-auto mb-3">
+<span class="text-success">// 1. Private fields hide critical financial data</span>
+<span class="text-info">private final double</span> advanceAmount = 200.0;
+<span class="text-info">private String</span> paymentStatus; <span class="text-muted">// "PENDING" or "SUCCESS"</span>
+<span class="text-info">private String</span> transactionId;
+
+<span class="text-success">// 2. Controlled method is the ONLY way to change paymentStatus</span>
+<span class="text-info">public boolean</span> processPayment(String txId) {
+    <span class="text-warning">if</span> (txId != <span class="text-danger">null</span> &amp;&amp; txId.trim().length() &gt;= 6) {
+        <span class="text-danger">this</span>.transactionId = txId.trim();
+        <span class="text-danger">this</span>.paymentStatus = <span class="text-success">"SUCCESS"</span>;
+        <span class="text-warning">return true</span>;
+    }
+    <span class="text-warning">return false</span>;
+}
+
+<span class="text-success">// 3. Safe read-only getters</span>
+<span class="text-info">public double</span> getAdvanceAmount() { <span class="text-warning">return</span> advanceAmount; }
+<span class="text-info">public String</span> getPaymentStatus() { <span class="text-warning">return</span> paymentStatus; }
+                    </div>
+                    <p class="small text-secondary mb-0">
+                        <strong>Why this is Encapsulation:</strong> External classes cannot directly assign <code>payment.paymentStatus = "SUCCESS"</code> or tamper with <code>advanceAmount</code>. All mutations are validated and channeled through the public method <code>processPayment()</code>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments :: footer}"></footer>
+
+</body>
+</html>
+

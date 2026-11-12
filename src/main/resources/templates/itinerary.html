@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: html_head(${destination.name} + ' Itinerary')}"></head>
+<body>
+
+    <!-- Header -->
+    <header th:replace="~{fragments :: navbar('destinations')}"></header>
+
+    <main class="py-5">
+        <div class="container">
+
+            <!-- Breadcrumb Navigation -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/destinations}">Destinations</a></li>
+                    <li class="breadcrumb-item active" aria-current="page" th:text="${destination.name}">Mysore</li>
+                </ol>
+            </nav>
+
+            <!-- Destination Hero Card -->
+            <div class="card border rounded-4 shadow-sm overflow-hidden mb-5 bg-white">
+                <div class="row g-0">
+                    <div class="col-lg-6 position-relative">
+                        <img th:src="${destination.imageUrl}" class="w-100 h-100 object-fit-cover" style="min-height: 380px;" th:alt="${destination.name}">
+                        <span class="badge-tag" th:text="${destination.tag}">Heritage &amp; Culture</span>
+                        <div class="position-absolute bottom-0 start-0 m-4 p-3 bg-dark bg-opacity-75 rounded-3 text-white backdrop-blur">
+                            <h2 class="fw-bold mb-1" th:text="${destination.name}">Mysore</h2>
+                            <div class="small"><i class="fa-solid fa-location-dot text-danger me-1"></i><span th:text="${destination.state}">Karnataka</span></div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 p-4 p-md-5 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-primary-subtle text-primary fw-bold px-3 py-2 rounded-pill">
+                                    <i class="fa-solid fa-clock me-1"></i> <span th:text="${destination.recommendedDays}">3</span> Days Recommended
+                                </span>
+                                <span class="badge bg-info-subtle text-info fw-bold px-3 py-2 rounded-pill" th:text="${trip.tripType}">
+                                    Solo Trip
+                                </span>
+                            </div>
+
+                            <h4 class="fw-bold mb-2">Trip Overview</h4>
+                            <p class="text-muted mb-4" th:text="${destination.description}">Detailed overview</p>
+
+                            <!-- Attractions -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold text-secondary text-uppercase small mb-2">Must-Visit Attractions</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span th:each="attraction : ${destination.touristAttractions}" 
+                                          class="badge bg-light text-dark border px-3 py-2">
+                                        <i class="fa-solid fa-landmark text-primary me-1"></i> <span th:text="${attraction}">Attraction</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cost & Budget Summary -->
+                        <div class="p-3 bg-light rounded-3 border">
+                            <div class="row g-2 text-center">
+                                <div class="col-4 border-end">
+                                    <span class="text-muted small">Your Budget</span>
+                                    <div class="fw-bold text-dark">₹<span th:text="${#numbers.formatDecimal(trip.totalBudget, 0, 'COMMA', 0, 'POINT')}">15,000</span></div>
+                                </div>
+                                <div class="col-4 border-end">
+                                    <span class="text-muted small">Estimated Cost</span>
+                                    <div class="fw-bold text-primary">₹<span th:text="${#numbers.formatDecimal(totalCost, 0, 'COMMA', 0, 'POINT')}">4,500</span></div>
+                                </div>
+                                <div class="col-4">
+                                    <span class="text-muted small">Remaining</span>
+                                    <div class="fw-bold text-success">₹<span th:text="${#numbers.formatDecimal(remainingBudget, 0, 'COMMA', 0, 'POINT')}">10,500</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Expense Breakdown & Itinerary Schedule -->
+            <div class="row g-4">
+                <!-- Left Column: Day-by-Day Itinerary Schedule -->
+                <div class="col-lg-8">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <span class="badge bg-primary text-white px-3 py-1 rounded-pill mb-1">Generated by Java TripService</span>
+                            <h3 class="fw-bold mb-0">Detailed Day-Wise Itinerary</h3>
+                        </div>
+                        <span class="badge bg-light text-muted border px-3 py-2" th:text="${#lists.size(itinerary)} + ' Days Plan'">3 Days Plan</span>
+                    </div>
+
+                    <!-- Day Cards -->
+                    <div th:each="day : ${itinerary}" class="itinerary-day-card">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                            <span class="day-badge">
+                                <i class="fa-solid fa-calendar-day me-1"></i> Day <span th:text="${day.dayNumber}">1</span>
+                            </span>
+                            <span class="text-muted small">
+                                <i class="fa-solid fa-coins text-warning me-1"></i> Est. Day Spend: 
+                                <strong>₹<span th:text="${#numbers.formatDecimal(day.estimatedDayCost, 0, 'COMMA', 0, 'POINT')}">1,500</span></strong>
+                            </span>
+                        </div>
+
+                        <h5 class="fw-bold text-dark mb-3" th:text="${day.title}">Arrival &amp; Sightseeing</h5>
+
+                        <!-- Places to visit -->
+                        <div class="mb-3">
+                            <div class="small fw-semibold text-secondary mb-1">Places to Visit:</div>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span th:each="place : ${day.places}" class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1">
+                                    <i class="fa-solid fa-map-pin me-1"></i><span th:text="${place}">Place</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Activities list -->
+                        <div>
+                            <div class="small fw-semibold text-secondary mb-1">Planned Activities:</div>
+                            <ul class="list-unstyled mb-0 d-flex flex-column gap-2 text-secondary small">
+                                <li th:each="act : ${day.activities}">
+                                    <i class="fa-solid fa-circle-check text-success me-2"></i><span th:text="${act}">Activity</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Cost Breakdown & Payment CTA -->
+                <div class="col-lg-4">
+                    <div class="card border rounded-4 shadow-sm p-4 sticky-top bg-white" style="top: 100px;">
+                        <h5 class="fw-bold mb-3 border-bottom pb-2">
+                            <i class="fa-solid fa-receipt text-primary me-2"></i> Expense Breakdown
+                        </h5>
+
+                        <ul class="list-unstyled d-flex flex-column gap-3 mb-4">
+                            <li class="d-flex justify-content-between align-items-center text-secondary small">
+                                <span><i class="fa-solid fa-ticket text-primary me-2"></i> Travel Fare:</span>
+                                <span class="fw-bold text-dark">₹<span th:text="${#numbers.formatDecimal(destination.travelCost, 0, 'COMMA', 0, 'POINT')}">900</span></span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center text-secondary small">
+                                <span><i class="fa-solid fa-bed text-info me-2"></i> Hotel &amp; Stay:</span>
+                                <span class="fw-bold text-dark">₹<span th:text="${#numbers.formatDecimal(destination.accommodationCost * destination.recommendedDays, 0, 'COMMA', 0, 'POINT')}">3,600</span></span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center text-secondary small">
+                                <span><i class="fa-solid fa-utensils text-warning me-2"></i> Food &amp; Dining:</span>
+                                <span class="fw-bold text-dark">₹<span th:text="${#numbers.formatDecimal(destination.foodCost * destination.recommendedDays, 0, 'COMMA', 0, 'POINT')}">1,500</span></span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center text-secondary small">
+                                <span><i class="fa-solid fa-taxi text-success me-2"></i> Local Transport:</span>
+                                <span class="fw-bold text-dark">₹<span th:text="${#numbers.formatDecimal(destination.localTransportCost, 0, 'COMMA', 0, 'POINT')}">500</span></span>
+                            </li>
+
+                            <li th:if="${user.isGroup()}" class="p-2 bg-light rounded text-center small text-primary fw-semibold">
+                                <i class="fa-solid fa-people-group me-1"></i> Multiplied &amp; optimized for <span th:text="${user.numberOfTravellers}">2</span> travellers
+                            </li>
+
+                            <li class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <span class="fw-bold text-dark">Total Estimated Cost:</span>
+                                <span class="h5 fw-bold text-primary mb-0">₹<span th:text="${#numbers.formatDecimal(totalCost, 0, 'COMMA', 0, 'POINT')}">4,500</span></span>
+                            </li>
+                        </ul>
+
+                        <!-- Advance Payment Callout -->
+                        <div class="p-3 bg-primary-subtle border border-primary-subtle rounded-3 mb-4 text-center">
+                            <span class="badge bg-primary text-white mb-1">Fixed Booking Advance</span>
+                            <div class="h4 fw-bold text-primary mb-1">₹200</div>
+                            <p class="small text-muted mb-0">Demo advance required to confirm booking.</p>
+                        </div>
+
+                        <!-- CTA Button: Pay and Download -->
+                        <a th:href="@{/payment}" class="btn btn-primary rounded-pill py-3 fw-bold w-100 shadow">
+                            <i class="fa-solid fa-file-invoice-dollar me-2"></i> Pay and Download
+                        </a>
+
+                        <a th:href="@{/destinations}" class="btn btn-outline-secondary rounded-pill py-2 w-100 mt-2 text-decoration-none">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Back to Destinations
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- College OOP Box -->
+            <div class="oop-box mt-5">
+                <span class="oop-badge"><i class="fa-solid fa-diagram-project me-1"></i> OOP Concept: Polymorphism in Action</span>
+                <h6 class="fw-bold text-primary mb-1">Polymorphic Total Cost Computation:</h6>
+                <p class="small text-muted mb-0">
+                    The total cost of <strong>₹<span th:text="${#numbers.formatDecimal(totalCost, 0, 'COMMA', 0, 'POINT')}">4,500</span></strong> was calculated by invoking <code>trip.calculateTotalCost()</code> through the polymorphic reference <code>Trip trip</code>. The concrete method in <code>SoloTrip</code> or <code>GroupTrip</code> handles the specific sharing logic dynamically!
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments :: footer}"></footer>
+
+</body>
+</html>
+

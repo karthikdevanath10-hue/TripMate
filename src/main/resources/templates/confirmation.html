@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: html_head('Booking Confirmed &bull; ' + ${booking.bookingId})}"></head>
+<body>
+
+    <!-- Header -->
+    <header th:replace="~{fragments :: navbar('bookings')}"></header>
+
+    <main class="py-5">
+        <div class="container">
+
+            <!-- Success Alert Banner -->
+            <div class="text-center mb-4 no-print">
+                <div class="rounded-circle bg-success-subtle text-success d-inline-flex align-items-center justify-content-center mb-3 shadow-sm" style="width: 72px; height: 72px; font-size: 2rem;">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <h2 class="fw-bold">Booking Confirmed Successfully!</h2>
+                <p class="text-muted">Thank you, <strong th:text="${booking.customerName}">Rahul Sharma</strong>. Your advance booking is locked and verified.</p>
+            </div>
+
+            <!-- Booking Voucher Card (Printable) -->
+            <div class="voucher-container max-w-800 mx-auto">
+                <!-- Voucher Header -->
+                <div class="voucher-header">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-compass fs-2 text-info"></i>
+                            <span class="fs-3 fw-bold tracking-tight">TripMate</span>
+                        </div>
+                        <span class="badge bg-success text-white px-3 py-2 fs-6 rounded-pill">
+                            <i class="fa-solid fa-check-circle me-1"></i> CONFIRMED
+                        </span>
+                    </div>
+
+                    <div class="row g-2 text-start pt-2 border-top border-white border-opacity-25">
+                        <div class="col-sm-6">
+                            <span class="small opacity-75">Booking Reference ID</span>
+                            <div class="h4 fw-bold font-monospace mb-0" th:text="${booking.bookingId}">TM-2026-8812</div>
+                        </div>
+                        <div class="col-sm-6 text-sm-end">
+                            <span class="small opacity-75">Booking Date &amp; Time</span>
+                            <div class="fw-medium" th:text="${booking.formattedBookingDate}">12 Nov 2026, 08:00 PM</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voucher Body -->
+                <div class="voucher-body">
+                    <!-- Destination & Traveler Info -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-secondary text-uppercase small fw-bold mb-3 border-bottom pb-2">
+                                <i class="fa-solid fa-map-location-dot text-primary me-1"></i> Trip Information
+                            </h6>
+                            <table class="table table-sm table-borderless small mb-0">
+                                <tr>
+                                    <td class="text-muted" style="width: 40%;">Destination:</td>
+                                    <td class="fw-bold text-dark fs-6" th:text="${booking.destinationName}">Mysore, Karnataka</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Trip Category:</td>
+                                    <td class="fw-semibold text-primary" th:text="${booking.trip.tripType}">Solo Trip</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Travellers:</td>
+                                    <td class="fw-semibold" th:text="${booking.numberOfTravellers} + ' Person(s)'">1 Person</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Starting City:</td>
+                                    <td class="fw-semibold" th:text="${booking.trip.user.startingCity}">Bengaluru</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="text-secondary text-uppercase small fw-bold mb-3 border-bottom pb-2">
+                                <i class="fa-solid fa-user-check text-primary me-1"></i> Traveler Details
+                            </h6>
+                            <table class="table table-sm table-borderless small mb-0">
+                                <tr>
+                                    <td class="text-muted" style="width: 40%;">Lead Name:</td>
+                                    <td class="fw-bold text-dark" th:text="${booking.customerName}">Rahul Sharma</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Age / Gender:</td>
+                                    <td class="fw-semibold" th:text="${booking.trip.user.age} + ' yrs / ' + ${booking.trip.user.gender}">22 yrs / Male</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Contact:</td>
+                                    <td class="fw-semibold" th:text="${#strings.isEmpty(booking.trip.user.contactNumber) ? 'N/A' : booking.trip.user.contactNumber}">N/A</td>
+                                </tr>
+                                <tr th:if="${booking.trip.user.isGroup()}">
+                                    <td class="text-muted">Group Name:</td>
+                                    <td class="fw-semibold" th:text="${booking.trip.user.groupName}">College Friends</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Financial Summary & Advance Paid -->
+                    <div class="p-3 bg-light rounded-3 border mb-4">
+                        <h6 class="text-secondary text-uppercase small fw-bold mb-3 border-bottom pb-2">
+                            <i class="fa-solid fa-receipt text-primary me-1"></i> Payment &amp; Accounts Ledger
+                        </h6>
+                        <div class="row g-3 text-center">
+                            <div class="col-md-4 border-end-md">
+                                <span class="text-muted small">Total Estimated Cost</span>
+                                <div class="h5 fw-bold text-dark mb-0">₹<span th:text="${#numbers.formatDecimal(booking.totalTripCost, 0, 'COMMA', 0, 'POINT')}">4,500</span></div>
+                            </div>
+                            <div class="col-md-4 border-end-md">
+                                <span class="text-muted small">Advance Paid (Online Demo)</span>
+                                <div class="h5 fw-bold text-success mb-0">
+                                    <i class="fa-solid fa-check me-1"></i>₹<span th:text="${#numbers.formatDecimal(booking.advancePaid, 0, 'COMMA', 0, 'POINT')}">2,000</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <span class="text-muted small">Balance Due at Destination</span>
+                                <div class="h5 fw-bold text-primary mb-0">₹<span th:text="${#numbers.formatDecimal(booking.remainingBalance, 0, 'COMMA', 0, 'POINT')}">2,500</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Reference & Encapsulation Verification -->
+                    <div class="row g-3 small text-secondary">
+                        <div class="col-sm-6">
+                            <span>Transaction Reference / UTR:</span><br>
+                            <code class="fw-bold text-dark fs-6" th:text="${booking.payment.transactionId}">UPI/DEMO/2026881921</code>
+                        </div>
+                        <div class="col-sm-6 text-sm-end">
+                            <span>Payment Status (from Payment class):</span><br>
+                            <span class="badge bg-success text-white px-2 py-1" th:text="${booking.payment.paymentStatus}">SUCCESS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voucher Footer Actions -->
+                <div class="voucher-footer d-flex justify-content-between align-items-center flex-wrap gap-2 no-print">
+                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-semibold" onclick="printVoucher()">
+                        <i class="fa-solid fa-print me-1"></i> Print / Download Voucher
+                    </button>
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/my-booking}" class="btn btn-outline-secondary rounded-pill px-3">
+                            <i class="fa-solid fa-list-check me-1"></i> All Bookings
+                        </a>
+                        <a th:href="@{/plan}" class="btn btn-outline-primary rounded-pill px-3">
+                            <i class="fa-solid fa-plus me-1"></i> Plan Another Trip
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- College Viva Guide Box -->
+            <div class="max-w-800 mx-auto mt-5 no-print">
+                <div class="oop-box">
+                    <span class="oop-badge"><i class="fa-solid fa-certificate me-1"></i> OOP Concept: Composition &amp; Encapsulation</span>
+                    <h6 class="fw-bold text-primary mb-1">How This Booking Object is Composed:</h6>
+                    <p class="small text-muted mb-0">
+                        The <code>Booking</code> object aggregates a <code>Trip</code> (which holds <code>User</code> and <code>Destination</code>) and a <code>Payment</code> object. The remaining balance (<code>₹<span th:text="${#numbers.formatDecimal(booking.remainingBalance, 0, 'COMMA', 0, 'POINT')}">2,500</span></code>) is calculated dynamically by querying encapsulated getters: <code>trip.calculateTotalCost() - payment.getAdvanceAmount()</code>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments :: footer}"></footer>
+
+</body>
+</html>
+

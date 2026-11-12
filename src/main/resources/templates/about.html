@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: html_head('About Us &bull; OOP Architecture Guide')}"></head>
+<body>
+
+    <!-- Header -->
+    <header th:replace="~{fragments :: navbar('about')}"></header>
+
+    <main class="py-5">
+        <div class="container">
+
+            <!-- Page Title -->
+            <div class="text-center max-w-800 mx-auto mb-5">
+                <span class="badge bg-primary-subtle text-primary fw-bold text-uppercase px-3 py-2 rounded-pill">College Project Evaluation Guide</span>
+                <h1 class="fw-bold mt-2">TripMate &mdash; OOP Architecture Guide</h1>
+                <p class="text-muted">
+                    Comprehensive documentation of Object-Oriented Programming (OOP) principles implemented in <strong>TripMate – Smart Trip Planner</strong>. Use this page during your college project presentation and viva evaluation.
+                </p>
+            </div>
+
+            <!-- Project Overview Card -->
+            <div class="card border rounded-4 shadow-sm p-4 p-md-5 mb-5 bg-white">
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-8">
+                        <h4 class="fw-bold text-primary mb-2">Project Overview</h4>
+                        <p class="text-secondary mb-3">
+                            <strong>TripMate</strong> is a modern web-based smart trip planning application developed using <strong>Java, Spring Boot, Spring MVC, and Thymeleaf</strong>. Rather than hardcoding fixed trips, TripMate dynamically analyzes user preferences, party size (solo vs. group), and travel budgets in Indian Rupees (&inr;) to recommend the best matching destinations with day-by-day itineraries and an advance booking verification module.
+                        </p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark border p-2"><i class="fa-brands fa-java text-danger me-1"></i> Java 21+ / Java 25</span>
+                            <span class="badge bg-light text-dark border p-2"><i class="fa-solid fa-leaf text-success me-1"></i> Spring Boot 3.3</span>
+                            <span class="badge bg-light text-dark border p-2"><i class="fa-solid fa-code text-primary me-1"></i> Thymeleaf Engine</span>
+                            <span class="badge bg-light text-dark border p-2"><i class="fa-solid fa-database text-warning me-1"></i> In-Memory &amp; CSV Storage</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 text-center">
+                        <div class="p-4 bg-light rounded-4 border">
+                            <div class="h3 fw-bold text-primary mb-1">TripMate</div>
+                            <div class="small text-muted mb-2">Tagline</div>
+                            <div class="fst-italic text-secondary small">"Plan Your Trip, Set Your Budget, Explore Your World."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OOP Concepts In-Depth Section -->
+            <h3 class="fw-bold mb-4 text-center">Key Object-Oriented Programming (OOP) Concepts</h3>
+
+            <!-- 1. DATA ENCAPSULATION (MAIN FOCUS) -->
+            <div class="card border-primary border-2 rounded-4 shadow-sm p-4 p-md-5 mb-5 bg-white">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 50px; height: 50px; font-size: 1.4rem;">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <span class="badge bg-danger text-white">Top Evaluation Requirement</span>
+                        <h4 class="fw-bold text-dark mb-0">1. Data Encapsulation (Crucial)</h4>
+                    </div>
+                </div>
+
+                <p class="text-secondary">
+                    <strong>Definition:</strong> Data Encapsulation is the mechanism of wrapping data (variables) and the methods that operate on that data into a single unit (class), while hiding the internal state of the object by declaring variables as <code>private</code>.
+                </p>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-lg-6">
+                        <h6 class="fw-bold text-dark mb-2">How It Is Implemented in <code>Payment.java</code>:</h6>
+                        <ul class="text-secondary small d-flex flex-column gap-2 mb-3">
+                            <li><strong>All fields are private:</strong> <code>advanceAmount</code>, <code>paymentStatus</code>, <code>transactionId</code>, and <code>paymentDate</code> cannot be directly accessed or tampered with from outside the class.</li>
+                            <li><strong>No Public Setters for State:</strong> There is deliberately NO <code>setPaymentStatus()</code> or <code>setAdvanceAmount()</code>.</li>
+                            <li><strong>Controlled Mutation via Method:</strong> The only authorized route to mark payment as <code>SUCCESS</code> is by invoking <code>processPayment(String transactionId)</code> with valid input parameters.</li>
+                            <li><strong>Read-Only Public Getters:</strong> External callers can inspect the status and advance amount safely through <code>getPaymentStatus()</code> and <code>getAdvanceAmount()</code>.</li>
+                        </ul>
+
+                        <div class="p-3 bg-light rounded-3 border small">
+                            <strong>Viva Question:</strong> "Why did you not provide a setter for paymentStatus?"<br>
+                            <span class="text-success fw-semibold">Answer:</span> "To prevent external classes or malicious tampering from changing a payment status to SUCCESS without proper verification of a valid transaction ID. This guarantees state encapsulation and data integrity."
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="bg-dark text-light p-3 rounded-3 small font-monospace">
+<span class="text-success">// com.tripmate.model.Payment.java</span>
+<span class="text-warning">public class</span> Payment {
+    <span class="text-danger">private String</span> paymentId;
+    <span class="text-danger">private final double</span> advanceAmount = 200.0;
+    <span class="text-danger">private String</span> paymentStatus;
+    <span class="text-danger">private String</span> transactionId;
+
+    <span class="text-info">// Controlled mutation method</span>
+    <span class="text-warning">public boolean</span> processPayment(String txId) {
+        <span class="text-warning">if</span> (txId != <span class="text-danger">null</span> &amp;&amp; txId.trim().length() &gt;= 6) {
+            <span class="text-danger">this</span>.transactionId = txId.trim();
+            <span class="text-danger">this</span>.paymentStatus = <span class="text-success">"SUCCESS"</span>;
+            <span class="text-warning">return true</span>;
+        }
+        <span class="text-danger">this</span>.paymentStatus = <span class="text-danger">"FAILED"</span>;
+        <span class="text-warning">return false</span>;
+    }
+
+    <span class="text-info">// Safe read-only getters</span>
+    <span class="text-warning">public double</span> getAdvanceAmount() { <span class="text-warning">return</span> advanceAmount; }
+    <span class="text-warning">public String</span> getPaymentStatus() { <span class="text-warning">return</span> paymentStatus; }
+}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. INHERITANCE -->
+            <div class="card border rounded-4 shadow-sm p-4 p-md-5 mb-5 bg-white">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center fw-bold" style="width: 50px; height: 50px; font-size: 1.4rem;">
+                        <i class="fa-solid fa-sitemap"></i>
+                    </div>
+                    <div>
+                        <span class="badge bg-info text-white">OOP Concept</span>
+                        <h4 class="fw-bold text-dark mb-0">2. Inheritance</h4>
+                    </div>
+                </div>
+
+                <p class="text-secondary">
+                    <strong>Definition:</strong> Inheritance allows a subclass to acquire attributes and behaviors from a superclass, fostering code reuse and defining a clear class hierarchy.
+                </p>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-lg-6">
+                        <h6 class="fw-bold text-dark mb-2">Class Hierarchy:</h6>
+                        <ul class="text-secondary small d-flex flex-column gap-2 mb-3">
+                            <li><strong>Superclass:</strong> <code>Trip</code> (abstract class) declares shared fields: <code>tripId</code>, <code>user</code>, <code>destination</code>, <code>totalBudget</code>, and concrete methods like <code>calculateRemainingBudget()</code>.</li>
+                            <li><strong>Subclasses:</strong>
+                                <ul>
+                                    <li><code>SoloTrip extends Trip</code>: Specializes behavior for an individual traveler.</li>
+                                    <li><code>GroupTrip extends Trip</code>: Specializes behavior for multiple travelers, room pooling, and pooled vehicle transit.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="bg-light p-3 rounded-3 border text-center font-monospace">
+                            <div class="p-2 bg-primary text-white rounded mb-2 fw-bold">abstract class Trip</div>
+                            <div class="text-muted small">&uarr; extends</div>
+                            <div class="row g-2 mt-1">
+                                <div class="col-6">
+                                    <div class="p-2 bg-white border border-primary rounded fw-bold text-primary">class SoloTrip</div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-2 bg-white border border-primary rounded fw-bold text-primary">class GroupTrip</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. POLYMORPHISM -->
+            <div class="card border rounded-4 shadow-sm p-4 p-md-5 mb-5 bg-white">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center fw-bold" style="width: 50px; height: 50px; font-size: 1.4rem;">
+                        <i class="fa-solid fa-shapes"></i>
+                    </div>
+                    <div>
+                        <span class="badge bg-success text-white">OOP Concept</span>
+                        <h4 class="fw-bold text-dark mb-0">3. Polymorphism</h4>
+                    </div>
+                </div>
+
+                <p class="text-secondary">
+                    <strong>Definition:</strong> Polymorphism ("many forms") allows a method to exhibit different behaviors based on the runtime instance invoking it. In Java, dynamic method dispatch enables invoking overridden subclass methods via a superclass reference.
+                </p>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-lg-6">
+                        <h6 class="fw-bold text-dark mb-2">Overridden <code>calculateTotalCost()</code> Method:</h6>
+                        <ul class="text-secondary small d-flex flex-column gap-2">
+                            <li>
+                                <strong>SoloTrip implementation:</strong> Cost is strictly 1x destination estimate per person.
+                            </li>
+                            <li>
+                                <strong>GroupTrip implementation:</strong> Dynamically calculates shared double-occupancy hotel rooms: <code>Math.ceil(travellers / 2.0)</code> and shared transport scaling factors.
+                            </li>
+                            <li>
+                                <strong>Polymorphic invocation:</strong>
+                                <code>Trip trip = activeTrip; double cost = trip.calculateTotalCost();</code>
+                                The caller does not need to know whether the instance is a <code>SoloTrip</code> or <code>GroupTrip</code>; Java executes the appropriate method at runtime!
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="bg-dark text-light p-3 rounded-3 small font-monospace">
+<span class="text-success">// Polymorphic dispatch in TripService / Controller</span>
+Trip trip = (user.isGroup()) 
+    ? <span class="text-warning">new</span> GroupTrip(id, user, dest, budget)
+    : <span class="text-warning">new</span> SoloTrip(id, user, dest, budget);
+
+<span class="text-info">// Dynamic method dispatch executes subclass implementation</span>
+<span class="text-warning">double</span> total = trip.calculateTotalCost();
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. ABSTRACTION -->
+            <div class="card border rounded-4 shadow-sm p-4 p-md-5 mb-5 bg-white">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center fw-bold" style="width: 50px; height: 50px; font-size: 1.4rem;">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <div>
+                        <span class="badge bg-warning text-dark">OOP Concept</span>
+                        <h4 class="fw-bold text-dark mb-0">4. Abstraction</h4>
+                    </div>
+                </div>
+
+                <p class="text-secondary">
+                    <strong>Definition:</strong> Abstraction hides complex internal implementation details and exposes only essential operations through interfaces and abstract classes.
+                </p>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-lg-6">
+                        <h6 class="fw-bold text-dark mb-2">Implemented Through Interfaces:</h6>
+                        <ul class="text-secondary small d-flex flex-column gap-2">
+                            <li><code>public interface PaymentService</code> defines high-level payment contracts: <code>initiatePayment()</code>, <code>validateTransactionReference()</code>, and <code>processPayment()</code>.</li>
+                            <li><code>DemoPaymentService implements PaymentService</code> provides the concrete demo implementation for the college demonstration.</li>
+                            <li>In the future, a real <code>RazorpayService</code> or <code>StripeService</code> can implement <code>PaymentService</code> without altering any controller or business logic.</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="bg-dark text-light p-3 rounded-3 small font-monospace">
+<span class="text-warning">public interface</span> PaymentService {
+    Payment initiatePayment();
+    <span class="text-warning">boolean</span> validateTransactionReference(String ref);
+    <span class="text-warning">boolean</span> processPayment(Payment p, String ref);
+}
+
+<span class="text-warning">public class</span> DemoPaymentService <span class="text-warning">implements</span> PaymentService {
+    <span class="text-muted">// Concrete implementation</span>
+}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Run & Evaluation Checklist -->
+            <div class="card border rounded-4 shadow-sm p-4 bg-light">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-list-check text-primary me-2"></i> Presentation Checklist for College Evaluator</h5>
+                <ol class="small text-secondary mb-0 d-flex flex-column gap-2">
+                    <li>Start at Home Page (<code>http://localhost:8080/</code>) &mdash; show branding, navigation, and popular destinations.</li>
+                    <li>Click <strong>"Plan a Trip"</strong> &mdash; show the choice between <strong>Solo Trip</strong> and <strong>Group Trip</strong>.</li>
+                    <li>Fill traveler details and enter a budget (e.g. ₹15,000 for solo or ₹30,000 for group).</li>
+                    <li>Show the <strong>Destination Recommendations</strong> generated by Java budget-matching logic.</li>
+                    <li>Select a destination (e.g. <strong>Mysore</strong>) and show the generated <strong>3-Day Itinerary</strong> with expense breakdown.</li>
+                    <li>Click <strong>"Proceed to Advance Payment"</strong> &mdash; show the demo QR code and open <code>Payment.java</code> in IDE to demonstrate <strong>Data Encapsulation</strong>.</li>
+                    <li>Click "Quick Fill Demo Transaction ID" and confirm payment &mdash; show the final <strong>Booking Confirmation Voucher</strong> with unique Booking ID.</li>
+                    <li>Click <strong>"Print Voucher"</strong> to demonstrate receipt generation.</li>
+                </ol>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments :: footer}"></footer>
+
+</body>
+</html>
+

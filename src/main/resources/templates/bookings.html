@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: html_head('My Bookings')}"></head>
+<body>
+
+    <!-- Header -->
+    <header th:replace="~{fragments :: navbar('bookings')}"></header>
+
+    <main class="py-5">
+        <div class="container">
+
+            <div class="text-center max-w-700 mx-auto mb-5">
+                <span class="badge bg-primary-subtle text-primary fw-bold text-uppercase px-3 py-2 rounded-pill">Manage Bookings</span>
+                <h2 class="fw-bold mt-2">Find &amp; Review Your Trips</h2>
+                <p class="text-muted">Search by your unique Booking ID or browse recent confirmed trip bookings.</p>
+            </div>
+
+            <!-- Search Booking Form -->
+            <div class="card border rounded-4 shadow-sm p-4 max-w-700 mx-auto mb-5 bg-white">
+                <form th:action="@{/my-booking}" method="get">
+                    <label class="form-label fw-semibold">Lookup by Booking Reference ID</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white"><i class="fa-solid fa-ticket text-muted"></i></span>
+                        <input type="text" name="searchId" class="form-control" placeholder="e.g. TM-2026-1045" 
+                               th:value="${searchId}" required>
+                        <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                            <i class="fa-solid fa-search me-1"></i> Find Booking
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Search Result if found -->
+                <div th:if="${searchedBooking != null}" class="mt-4 p-3 bg-light rounded-3 border">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div>
+                            <span class="badge bg-success text-white mb-1">FOUND</span>
+                            <h5 class="fw-bold mb-0 text-dark">
+                                <span th:text="${searchedBooking.bookingId}">TM-2026-1001</span> &mdash; 
+                                <span th:text="${searchedBooking.destinationName}">Mysore</span>
+                            </h5>
+                            <small class="text-muted">Traveler: <strong th:text="${searchedBooking.customerName}">Rahul</strong></small>
+                        </div>
+                        <a th:href="@{'/confirmation/' + ${searchedBooking.bookingId}}" class="btn btn-sm btn-primary rounded-pill px-3">
+                            Open Voucher <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Not found message -->
+                <div th:if="${notFoundMessage != null}" class="alert alert-warning mt-4 mb-0 small" role="alert">
+                    <i class="fa-solid fa-circle-exclamation me-1"></i>
+                    <span th:text="${notFoundMessage}">No booking found</span>
+                </div>
+            </div>
+
+            <!-- All Bookings Table -->
+            <div class="card border rounded-4 shadow-sm overflow-hidden bg-white">
+                <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold mb-0"><i class="fa-solid fa-table-list text-primary me-2"></i> All Confirmed Bookings</h5>
+                        <small class="text-muted">Stored using Java HashMap and synchronized CSV persistence</small>
+                    </div>
+                    <span class="badge bg-light text-dark border px-3 py-2 fw-bold" th:text="${#lists.size(bookings)} + ' Total'">0 Total</span>
+                </div>
+
+                <div th:if="${#lists.isEmpty(bookings)}" class="p-5 text-center text-muted">
+                    <i class="fa-regular fa-folder-open fs-1 mb-3 text-secondary"></i>
+                    <h5>No Bookings Created Yet</h5>
+                    <p class="small mb-4">Start by selecting a destination and completing the demo ₹200 payment.</p>
+                    <a th:href="@{/plan}" class="btn btn-primary rounded-pill px-4">
+                        <i class="fa-solid fa-paper-plane me-1"></i> Plan a Trip Now
+                    </a>
+                </div>
+
+                <div th:unless="${#lists.isEmpty(bookings)}" class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light small text-secondary text-uppercase">
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Lead Traveler</th>
+                                <th>Destination</th>
+                                <th>Trip Type</th>
+                                <th>Est. Cost</th>
+                                <th>Advance Paid</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="b : ${bookings}">
+                                <td>
+                                    <strong class="font-monospace text-primary" th:text="${b.bookingId}">TM-2026-1234</strong>
+                                    <div class="text-muted small" th:text="${b.formattedBookingDate}">12 Nov</div>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold text-dark" th:text="${b.customerName}">Rahul</div>
+                                    <small class="text-muted" th:text="${b.numberOfTravellers} + ' Traveller(s)'">1 Traveller</small>
+                                </td>
+                                <td>
+                                    <span class="fw-medium text-dark" th:text="${b.destinationName}">Mysore</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border" th:text="${b.trip != null ? b.trip.tripType : 'Solo Trip'}">Solo Trip</span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-dark">₹<span th:text="${#numbers.formatDecimal(b.totalTripCost, 0, 'COMMA', 0, 'POINT')}">4,500</span></span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle fw-bold">
+                                        ₹<span th:text="${#numbers.formatDecimal(b.advancePaid, 0, 'COMMA', 0, 'POINT')}">2,000</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success text-white" th:text="${b.status}">CONFIRMED</span>
+                                </td>
+                                <td class="text-end">
+                                    <a th:href="@{'/confirmation/' + ${b.bookingId}}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                        View Voucher
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments :: footer}"></footer>
+
+</body>
+</html>
+

@@ -1,0 +1,440 @@
+/* ==========================================================================
+   TripMate - Smart Trip Planner
+   Main Stylesheet (Modern Blue & White Travel Theme)
+   ========================================================================== */
+
+:root {
+    --primary-color: #1a73e8;
+    --primary-hover: #1557b0;
+    --secondary-color: #00b4d8;
+    --accent-color: #ff7a00;
+    --dark-color: #1e293b;
+    --light-bg: #f8fafc;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --text-muted: #64748b;
+    --success-color: #10b981;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.12);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--light-bg);
+    color: var(--dark-color);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* --- Navigation Bar --- */
+.navbar-tripmate {
+    background: #ffffff;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+    padding: 14px 0;
+    transition: var(--transition);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--primary-color) !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.5px;
+}
+
+.navbar-brand span {
+    color: var(--secondary-color);
+}
+
+.nav-link {
+    font-weight: 500;
+    color: #475569 !important;
+    padding: 8px 16px !important;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-color) !important;
+    background: #eff6ff;
+}
+
+.btn-nav-plan {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: #ffffff !important;
+    font-weight: 600;
+    padding: 8px 20px !important;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.25);
+}
+
+.btn-nav-plan:hover {
+    box-shadow: 0 6px 16px rgba(26, 115, 232, 0.4);
+    transform: translateY(-1px);
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    position: relative;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.75), rgba(26, 115, 232, 0.65)),
+                url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    color: #ffffff;
+    padding: 100px 0 120px;
+    border-radius: 0 0 32px 32px;
+}
+
+.hero-tagline-badge {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    padding: 6px 18px;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.hero-title {
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+}
+
+.hero-title span {
+    color: #7dd3fc;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: #e2e8f0;
+    max-width: 620px;
+    margin-bottom: 35px;
+}
+
+.btn-hero-cta {
+    background: #ffffff;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 14px 34px;
+    border-radius: 50px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    transition: var(--transition);
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-hero-cta:hover {
+    background: #f0fdf4;
+    color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Cards & UI Elements --- */
+.tripmate-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.tripmate-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+    border-color: #cbd5e1;
+}
+
+.card-img-wrapper {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.tripmate-card:hover .card-img-wrapper img {
+    transform: scale(1.06);
+}
+
+.badge-tag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(6px);
+    color: #ffffff;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-budget-match {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: #10b981;
+    color: #ffffff;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+}
+
+.price-chip {
+    background: #eff6ff;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.15rem;
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    display: inline-block;
+}
+
+/* --- Selection / Options Cards --- */
+.option-card {
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 32px 24px;
+    text-align: center;
+    background: #ffffff;
+    transition: var(--transition);
+}
+
+.option-card:hover, .option-card.selected {
+    border-color: var(--primary-color);
+    background: #f0f7ff;
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.option-icon-circle {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #e0f2fe, #dbeafe);
+    color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 20px;
+    transition: var(--transition);
+}
+
+.option-card:hover .option-icon-circle {
+    background: var(--primary-color);
+    color: #ffffff;
+    transform: scale(1.08);
+}
+
+/* --- Budget Chips --- */
+.budget-chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.budget-chip {
+    padding: 8px 18px;
+    border-radius: 50px;
+    border: 1px solid var(--border-color);
+    background: #ffffff;
+    color: #334155;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.budget-chip:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: #eff6ff;
+}
+
+.budget-chip.active {
+    background: var(--primary-color);
+    color: #ffffff;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 10px rgba(26, 115, 232, 0.3);
+}
+
+/* --- Itinerary Timeline --- */
+.itinerary-day-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    border-left: 6px solid var(--primary-color);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.itinerary-day-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.day-badge {
+    background: var(--primary-color);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 4px 12px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+/* --- OOP Educational Callout Box --- */
+.oop-box {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: var(--radius-md);
+    padding: 24px;
+    margin: 24px 0;
+    position: relative;
+}
+
+.oop-badge {
+    background: #1d4ed8;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+/* --- Payment QR Card --- */
+.qr-container {
+    background: #ffffff;
+    border: 2px dashed #93c5fd;
+    border-radius: var(--radius-md);
+    padding: 24px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.qr-box {
+    width: 220px;
+    height: 220px;
+    margin: 0 auto 16px;
+    background: #ffffff;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Confirmation Voucher --- */
+.voucher-container {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.voucher-header {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #ffffff;
+    padding: 32px;
+    text-align: center;
+}
+
+.voucher-body {
+    padding: 36px;
+}
+
+.voucher-footer {
+    background: #f8fafc;
+    border-top: 1px solid var(--border-color);
+    padding: 20px 36px;
+}
+
+/* --- Footer --- */
+.footer-tripmate {
+    background: #0f172a;
+    color: #94a3b8;
+    padding: 50px 0 25px;
+    margin-top: 60px;
+}
+
+.footer-tripmate h5 {
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+.footer-tripmate a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.footer-tripmate a:hover {
+    color: #ffffff;
+}
+
+.footer-bottom {
+    border-top: 1px solid #1e293b;
+    padding-top: 25px;
+    margin-top: 35px;
+    font-size: 0.9rem;
+}
+
+/* --- Print Styles --- */
+@media print {
+    .navbar-tripmate, .footer-tripmate, .no-print, .btn-print-hide {
+        display: none !important;
+    }
+    body {
+        background: #ffffff;
+        color: #000000;
+    }
+    .voucher-container {
+        box-shadow: none;
+        border: 1px solid #000000;
+    }
+}
+

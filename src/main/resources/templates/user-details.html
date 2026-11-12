@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: html_head('Enter Details &amp; Budget')}"></head>
+<body>
+
+    <!-- Header -->
+    <header th:replace="~{fragments :: navbar('plan')}"></header>
+
+    <main class="py-5">
+        <div class="container">
+            <!-- Progress indicator -->
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="d-flex justify-content-between align-items-center position-relative">
+                        <div class="text-center" style="z-index: 2;">
+                            <a th:href="@{/plan}" class="text-decoration-none">
+                                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto mb-1 fw-bold" style="width: 38px; height: 38px;">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span class="small fw-semibold text-success">Trip Type</span>
+                            </a>
+                        </div>
+                        <div class="text-center" style="z-index: 2;">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-1 fw-bold shadow" style="width: 38px; height: 38px;">2</div>
+                            <span class="small fw-bold text-primary">Details &amp; Budget</span>
+                        </div>
+                        <div class="text-center" style="z-index: 2;">
+                            <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center mx-auto mb-1 fw-bold" style="width: 38px; height: 38px;">3</div>
+                            <span class="small text-muted">Destinations</span>
+                        </div>
+                        <div class="text-center" style="z-index: 2;">
+                            <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center mx-auto mb-1 fw-bold" style="width: 38px; height: 38px;">4</div>
+                            <span class="small text-muted">Advance Payment</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Title -->
+            <div class="text-center max-w-700 mx-auto mb-4">
+                <span class="badge bg-primary-subtle text-primary fw-bold text-uppercase px-3 py-2 rounded-pill">Step 2 of 4</span>
+                <h2 class="fw-bold mt-2" th:text="${isGroup} ? 'Group Details &amp; Travel Budget' : 'Personal Details &amp; Travel Budget'">Personal Details &amp; Travel Budget</h2>
+                <p class="text-muted">Fill in your information to receive personalized destination recommendations tailored to your budget.</p>
+            </div>
+
+            <!-- Flash Error Notification -->
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show max-w-800 mx-auto" role="alert">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                <span th:text="${errorMessage}">Error message</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- Main Form Card -->
+            <div class="card border rounded-4 shadow-sm max-w-800 mx-auto bg-white overflow-hidden">
+                <div class="p-4 bg-light border-bottom d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold mb-0">
+                            <i th:class="${isGroup} ? 'fa-solid fa-people-group text-primary me-2' : 'fa-solid fa-user text-primary me-2'"></i>
+                            <span th:text="${isGroup} ? 'Group Trip Registration' : 'Solo Traveler Registration'">Registration</span>
+                        </h5>
+                        <small class="text-muted" th:text="${isGroup} ? 'Group Leader &amp; Members details' : 'Your personal profile'"></small>
+                    </div>
+                    <span class="badge bg-primary rounded-pill px-3 py-2" th:text="${isGroup} ? 'Group Mode' : 'Solo Mode'">Mode</span>
+                </div>
+
+                <div class="p-4 p-md-5">
+                    <form th:action="@{/user-details}" method="post">
+                        <!-- Hidden Trip Type & DestId -->
+                        <input type="hidden" name="tripType" th:value="${tripType}">
+                        <input type="hidden" name="destId" th:value="${destId}">
+
+                        <!-- SECTION 1: Personal Details / Group Leader -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-uppercase text-secondary small border-bottom pb-2 mb-3">
+                                <span th:text="${isGroup} ? '1. Group Leader Details' : '1. Traveler Details'">1. Traveler Details</span>
+                            </h6>
+
+                            <div class="row g-3">
+                                <div class="col-md-7">
+                                    <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white"><i class="fa-solid fa-user text-muted"></i></span>
+                                        <input type="text" name="fullName" class="form-control" placeholder="e.g. Rahul Sharma" 
+                                               th:value="${user.fullName}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="form-label fw-semibold">Age <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white"><i class="fa-solid fa-calendar-days text-muted"></i></span>
+                                        <input type="number" name="age" class="form-control" placeholder="Age" min="1" max="120" 
+                                               th:value="${user.age > 0 ? user.age : 22}" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Gender</label>
+                                    <select name="gender" class="form-select">
+                                        <option value="Male" th:selected="${user.gender == 'Male'}">Male</option>
+                                        <option value="Female" th:selected="${user.gender == 'Female'}">Female</option>
+                                        <option value="Other" th:selected="${user.gender == 'Other'}">Other</option>
+                                        <option value="Prefer not to say" th:selected="${user.gender == 'Prefer not to say'}">Prefer not to say</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Starting City <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white"><i class="fa-solid fa-location-crosshairs text-muted"></i></span>
+                                        <input type="text" name="startingCity" class="form-control" placeholder="e.g. Bengaluru, Mumbai" 
+                                               th:value="${user.startingCity != null ? user.startingCity : 'Bengaluru'}" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Contact Mobile Number <span class="text-muted fw-normal">(Optional for booking alerts)</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white"><i class="fa-solid fa-phone text-muted"></i></span>
+                                        <input type="tel" name="contactNumber" class="form-control" placeholder="10-digit mobile number" 
+                                               th:value="${user.contactNumber}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 2: Group Specific Details (Conditional) -->
+                        <div th:if="${isGroup}" class="mb-4">
+                            <h6 class="fw-bold text-uppercase text-secondary small border-bottom pb-2 mb-3">
+                                2. Group Information &amp; Travellers
+                            </h6>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-7">
+                                    <label class="form-label fw-semibold">Group Name <span class="text-muted fw-normal">(Optional)</span></label>
+                                    <input type="text" name="groupName" class="form-control" placeholder="e.g. College Gang, Tech Squad" 
+                                           th:value="${user.groupName}">
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="form-label fw-semibold">Number of Travellers <span class="text-danger">*</span></label>
+                                    <select name="numberOfTravellers" id="numberOfTravellers" class="form-select" required>
+                                        <option value="2" th:selected="${user.numberOfTravellers == 2}">2 Travellers (1 Room)</option>
+                                        <option value="3" th:selected="${user.numberOfTravellers == 3}">3 Travellers (2 Rooms)</option>
+                                        <option value="4" th:selected="${user.numberOfTravellers == 4}">4 Travellers (2 Rooms)</option>
+                                        <option value="5" th:selected="${user.numberOfTravellers == 5}">5 Travellers (3 Rooms)</option>
+                                        <option value="6" th:selected="${user.numberOfTravellers == 6}">6 Travellers (3 Rooms)</option>
+                                        <option value="8" th:selected="${user.numberOfTravellers == 8}">8 Travellers (4 Rooms)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Container for dynamically rendered member names & ages -->
+                            <div id="groupMembersList"></div>
+                        </div>
+
+                        <!-- SECTION 3: Budget Selection -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-uppercase text-secondary small border-bottom pb-2 mb-3">
+                                <span th:text="${isGroup} ? '3. Total Group Budget (INR)' : '2. Total Travel Budget (INR)'">Budget Selection</span>
+                            </h6>
+
+                            <div class="p-3 bg-light rounded-3 border mb-3">
+                                <label class="form-label fw-bold mb-1">
+                                    Enter Available Budget (₹) <span class="text-danger">*</span>
+                                </label>
+                                <p class="text-muted small mb-2" th:text="${isGroup} ? 'Enter the entire budget for your group. We will optimize hotel rooms and cab costs automatically.' : 'Enter your total individual travel budget.'">
+                                    Budget details
+                                </p>
+
+                                <div class="input-group input-group-lg mb-2">
+                                    <span class="input-group-text bg-white fw-bold text-primary">₹</span>
+                                    <input type="number" name="budget" id="budgetInput" class="form-control fw-bold" 
+                                           min="1000" step="500" placeholder="e.g. 15000" 
+                                           th:value="${#numbers.formatDecimal(budget, 0, 0)}" required>
+                                    <span th:if="${isGroup}" id="perPersonBudgetBadge" class="input-group-text bg-primary-subtle text-primary fw-bold">
+                                        ₹10,000 / person
+                                    </span>
+                                </div>
+
+                                <!-- Quick Chips -->
+                                <div class="small text-muted fw-semibold mb-1">Quick Select:</div>
+                                <div class="budget-chip-group">
+                                    <button type="button" class="budget-chip" data-amount="2000">₹2,000</button>
+                                    <button type="button" class="budget-chip" data-amount="5000">₹5,000</button>
+                                    <button type="button" class="budget-chip" data-amount="10000">₹10,000</button>
+                                    <button type="button" class="budget-chip" data-amount="15000">₹15,000</button>
+                                    <button type="button" class="budget-chip" data-amount="20000">₹20,000</button>
+                                    <button type="button" class="budget-chip" data-amount="30000">₹30,000</button>
+                                    <button type="button" class="budget-chip" data-amount="50000">₹50,000</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                            <a th:href="@{/plan}" class="btn btn-outline-secondary rounded-pill px-4">
+                                <i class="fa-solid fa-arrow-left me-1"></i> Back
+                            </a>
+                            <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow">
+                                Find Recommendations <i class="fa-solid fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- College Encapsulation Note -->
+            <div class="max-w-800 mx-auto mt-4">
+                <div class="oop-box">
+                    <span class="oop-badge"><i class="fa-solid fa-lock me-1"></i> OOP Concept: Data Encapsulation</span>
+                    <h6 class="fw-bold text-primary mb-1">Data Safety in the User Object:</h6>
+                    <p class="small text-muted mb-0">
+                        When this form submits, data is bound through private properties in the <code>User</code> class. Getters &amp; setters validate constraints (e.g., <code>age &gt;= 1 &amp;&amp; age &lt;= 120</code>, non-empty full name) so that corrupted state can never enter the application.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments :: footer}"></footer>
+
+</body>
+</html>
+

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: html_head('Destination Recommendations')}"></head>
+<body>
+
+    <!-- Header -->
+    <header th:replace="~{fragments :: navbar('destinations')}"></header>
+
+    <main class="py-5">
+        <div class="container">
+
+            <!-- User Context / Budget Banner -->
+            <div class="bg-white border rounded-4 p-4 shadow-sm mb-4">
+                <div class="row align-items-center g-3">
+                    <div class="col-lg-7">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-primary text-white" th:text="${user.isGroup()} ? 'Group Trip (' + ${user.numberOfTravellers} + ' People)' : 'Solo Trip'">Solo Trip</span>
+                            <span class="text-muted small">&bull; Starting from <strong th:text="${user.startingCity}">Bengaluru</strong></span>
+                        </div>
+                        <h4 class="fw-bold mb-1">
+                            Hello, <span th:text="${user.fullName}">Traveler</span>!
+                        </h4>
+                        <p class="text-muted small mb-0">
+                            Here are destinations curated to match your total budget of 
+                            <strong class="text-dark">₹<span th:text="${#numbers.formatDecimal(budget, 0, 'COMMA', 0, 'POINT')}">15,000</span></strong>
+                            <span th:if="${isGroup}"> (approx. <strong>₹<span th:text="${#numbers.formatDecimal(perPersonBudget, 0, 'COMMA', 0, 'POINT')}">5,000</span></strong> per person)</span>.
+                        </p>
+                    </div>
+                    <div class="col-lg-5 text-lg-end">
+                        <div class="d-inline-flex align-items-center gap-2">
+                            <a th:href="@{/user-details(tripType=${isGroup ? 'group' : 'solo'})}" class="btn btn-outline-primary rounded-pill px-3 py-2 btn-sm">
+                                <i class="fa-solid fa-pen-to-square me-1"></i> Edit Budget / Details
+                            </a>
+                            <a th:href="@{/plan}" class="btn btn-light border rounded-pill px-3 py-2 btn-sm">
+                                <i class="fa-solid fa-rotate-left me-1"></i> Change Mode
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="row g-3 align-items-center mb-4">
+                <div class="col-md-6">
+                    <form th:action="@{/destinations}" method="get" class="d-flex gap-2">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                            <input type="text" name="search" class="form-control" placeholder="Search by name, state (e.g. Ooty, Goa, Kerala)..." 
+                                   th:value="${searchQuery}">
+                            <button type="submit" class="btn btn-primary px-3">Search</button>
+                        </div>
+                        <a th:if="${searchQuery != null and !searchQuery.isEmpty()}" th:href="@{/destinations}" class="btn btn-outline-secondary">
+                            Reset
+                        </a>
+                    </form>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <span class="text-muted small me-2">Showing</span>
+                    <span class="badge bg-light text-dark border px-3 py-2 fw-bold" 
+                          th:text="${#lists.size(recommendedDestinations)} + ' Destinations Found'">0 Destinations</span>
+                </div>
+            </div>
+
+            <!-- Empty State: No Destination Within Budget -->
+            <div th:if="${#lists.isEmpty(recommendedDestinations)}" class="card border rounded-4 shadow-sm p-5 text-center my-4 bg-white">
+                <div class="option-icon-circle mb-3" style="width: 70px; height: 70px; font-size: 1.8rem; background: #fee2e2; color: #dc2626;">
+                    <i class="fa-solid fa-face-frown-open"></i>
+                </div>
+                <h4 class="fw-bold">No Destinations Found Within ₹<span th:text="${#numbers.formatDecimal(budget, 0, 'COMMA', 0, 'POINT')}">1,000</span></h4>
+                <p class="text-muted max-w-600 mx-auto mb-4">
+                    The entered budget is slightly lower than the estimated minimum costs for available packages. We recommend increasing your budget to at least <strong>₹2,200</strong> (for Nandi Hills) or exploring our closest alternatives below.
+                </p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a th:href="@{/user-details(tripType=${isGroup ? 'group' : 'solo'})}" class="btn btn-primary rounded-pill px-4">
+                        <i class="fa-solid fa-wallet me-1"></i> Adjust Budget
+                    </a>
+                </div>
+
+                <!-- Affordable Alternatives Section -->
+                <div th:if="${affordableAlternatives != null and !affordableAlternatives.isEmpty()}" class="mt-5 text-start">
+                    <h5 class="fw-bold border-bottom pb-2 mb-4">
+                        <i class="fa-solid fa-lightbulb text-warning me-2"></i> Most Affordable Alternatives:
+                    </h5>
+                    <div class="row g-4">
+                        <div th:each="dest : ${affordableAlternatives}" class="col-md-4">
+                            <div class="tripmate-card h-100 p-3">
+                                <h6 class="fw-bold mb-1" th:text="${dest.name}">Nandi Hills</h6>
+                                <div class="text-muted small mb-2" th:text="${dest.state}">Karnataka</div>
+                                <div class="price-chip mb-2">₹<span th:text="${#numbers.formatDecimal(dest.estimatedCostPerPerson, 0, 'COMMA', 0, 'POINT')}">2,200</span> / person</div>
+                                <a th:href="@{'/itinerary/' + ${dest.id}}" class="btn btn-sm btn-outline-primary rounded-pill w-100">
+                                    View Itinerary
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Destination Grid -->
+            <div th:unless="${#lists.isEmpty(recommendedDestinations)}" class="row g-4">
+                <div th:each="dest : ${recommendedDestinations}" class="col-lg-4 col-md-6">
+                    <div class="tripmate-card h-100 d-flex flex-column">
+                        <div class="card-img-wrapper">
+                            <img th:src="${dest.imageUrl}" th:alt="${dest.name}" loading="lazy">
+                            <span class="badge-tag" th:text="${dest.tag}">Hill Station</span>
+                            <span class="badge-budget-match">
+                                <i class="fa-solid fa-circle-check me-1"></i> Within Budget
+                            </span>
+                        </div>
+
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <h5 class="fw-bold mb-0 text-dark" th:text="${dest.name}">Mysore</h5>
+                                <span class="badge bg-light text-muted border">
+                                    <i class="fa-regular fa-clock me-1"></i><span th:text="${dest.recommendedDays}">3</span> Days
+                                </span>
+                            </div>
+
+                            <div class="text-muted small mb-3">
+                                <i class="fa-solid fa-location-dot text-danger me-1"></i>
+                                <span th:text="${dest.state}">Karnataka</span>
+                            </div>
+
+                            <p class="text-muted small line-clamp-2 mb-3" th:text="${dest.description}">Description</p>
+
+                            <!-- Attractions Chips -->
+                            <div class="mb-3">
+                                <div class="small fw-semibold text-secondary mb-1">Key Attractions:</div>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span th:each="attraction, stat : ${dest.touristAttractions}" 
+                                          th:if="${stat.index < 3}"
+                                          class="badge bg-light text-secondary border small" 
+                                          th:text="${attraction}">Attraction</span>
+                                </div>
+                            </div>
+
+                            <!-- Expense Breakdown Pills -->
+                            <div class="bg-light p-2 rounded-3 small text-secondary mb-3 border">
+                                <div class="d-flex justify-content-between py-1 border-bottom">
+                                    <span><i class="fa-solid fa-bus text-primary me-1"></i> Travel:</span>
+                                    <span class="fw-bold">₹<span th:text="${#numbers.formatDecimal(dest.travelCost, 0, 'COMMA', 0, 'POINT')}">900</span></span>
+                                </div>
+                                <div class="d-flex justify-content-between py-1 border-bottom">
+                                    <span><i class="fa-solid fa-hotel text-info me-1"></i> Stay/Day:</span>
+                                    <span class="fw-bold">₹<span th:text="${#numbers.formatDecimal(dest.accommodationCost, 0, 'COMMA', 0, 'POINT')}">1,200</span></span>
+                                </div>
+                                <div class="d-flex justify-content-between py-1">
+                                    <span><i class="fa-solid fa-utensils text-warning me-1"></i> Food/Day:</span>
+                                    <span class="fw-bold">₹<span th:text="${#numbers.formatDecimal(dest.foodCost, 0, 'COMMA', 0, 'POINT')}">500</span></span>
+                                </div>
+                            </div>
+
+                            <!-- Cost & CTA Button -->
+                            <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="text-muted small">Est. Trip Cost</div>
+                                    <div class="price-chip">
+                                        ₹<span th:text="${#numbers.formatDecimal(dest.estimatedCostPerPerson, 0, 'COMMA', 0, 'POINT')}">4,500</span>
+                                    </div>
+                                </div>
+                                <a th:href="@{'/itinerary/' + ${dest.id}}" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm">
+                                    Select &amp; Plan <i class="fa-solid fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- College OOP Architecture Note -->
+            <div class="oop-box mt-5">
+                <span class="oop-badge"><i class="fa-solid fa-microchip me-1"></i> Java Recommendation Engine</span>
+                <h6 class="fw-bold text-primary mb-1">Dynamic Budget Comparison:</h6>
+                <p class="small text-muted mb-0">
+                    Recommendations are computed directly inside <code>DestinationService.getRecommendedDestinations()</code>. For group trips, <code>GroupTrip.calculateTotalCost()</code> is invoked; for solo trips, <code>SoloTrip.calculateTotalCost()</code> is invoked. This strictly enforces business logic in Java rather than client-side scripts.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments :: footer}"></footer>
+
+</body>
+</html>
+
