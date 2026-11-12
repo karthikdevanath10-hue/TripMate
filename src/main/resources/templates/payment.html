@@ -135,12 +135,12 @@
                             </div>
                         </div>
 
-                        <!-- Direct Download Option Placed Under Scanner -->
+                        <!-- Direct Download Option Placed Under Scanner: Downloads Actual Trip Plan (Picture 1) -->
                         <div class="mb-3 text-center">
-                            <button type="button" class="btn btn-danger btn-lg rounded-pill px-4 py-3 fw-bold w-100 shadow" 
-                                    th:onclick="'downloadItineraryPdf(\'' + ${trip.destination.id} + '\')'">
+                            <a th:href="@{'/itinerary/' + ${trip.destination.id} + '?print=true'}" target="_blank" 
+                               class="btn btn-danger btn-lg rounded-pill px-4 py-3 fw-bold w-100 shadow text-decoration-none">
                                 <i class="fa-solid fa-file-pdf me-2"></i> Download Trip Plan (PDF)
-                            </button>
+                            </a>
                         </div>
 
                         <!-- One-Click Demo Autofill for Evaluator -->
